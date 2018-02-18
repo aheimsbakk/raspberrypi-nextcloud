@@ -202,6 +202,41 @@ sudo apt-get install certbot
 sudo certbot --authenticator webroot --installer apache -w /media/nextcloud/html/ -d example.com
 ```
 
+### Fix rc.local 
+
+Autostart everything during boot. 
+
+```bash
+sudo vi /etc/rc.local
+```
+
+```bash
+#!/bin/bash -e
+
+# Print the IP address
+_IP=$(hostname -I) || true
+if [ "$_IP" ]; then
+  printf "My IP address is %s\n" "$_IP"
+fi
+
+DISK=/dev/disk/by-uuid/4a5a58c7-5adb-4825-83cb-55d88dba8f19
+CDISK=/dev/mapper/cnextcloud
+NDIR=/media/nextcloud
+
+sleep 3
+test -L $CDISK || cryptsetup --key-file <(/lib/cryptsetup/scripts/passdev /dev/disk/by-label/KEY:/random.key) open $DISK cnextcloud
+grep "$NDIR" /proc/mounts || mount -o noatime,nodiratime,journal_checksum $CDISK $NDIR
+
+sleep 3
+systemctl start mysql &
+
+sleep 3
+systemctl start apache2 &
+
+exit 0
+```
+
+
 ### Run the installer Nextcloud installer
 
 Download installer from Nextcloud site.
