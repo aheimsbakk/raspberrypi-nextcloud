@@ -1,5 +1,9 @@
 # Bootstrap Raspberry Zero W
 
+Got a new Raspberry Zero W and needed to configure it without screen. Wrote 
+down a short recipe to remember how to do it.
+
+## Bootstrap Raspbian
 
 - Install [Raspberian](), by using i.e. [Etcher]() on the microSD card.
 
@@ -15,7 +19,7 @@
         dtoverlay=dwc2
         ```
 
-    - Ensure that modules are loaded during boot.
+    - Ensure that modules, including OTG network driver, are loaded during boot.
 
         ```
         vi cmdline.txt
@@ -23,13 +27,13 @@
 
         Add `modules-load=dwc2,g_ether` after `rootwait`.
         
-    - Enable SSH during boot.
+    - Enable SSH during first boot.
 
         ```
         touch ssh
         ```
 
-- Use `nm-connection-editor` and share your Internet through the `enp0sXXXX` device.
+- On your Linux machine, use `nm-connection-editor` and share your Internet through the `enp0sXXXX` device.
 
 - Search for your Raspberry Zero, 10.42.0.1 is your internal interface.
 
@@ -49,15 +53,23 @@
     sudo systemctl enable ssh
     ```
 
-- Configure the rest.
+## Finish up configuration
 
-    ```
-    sudo raspi-config
-    ```
+Now finish up the configuration by using the configuration tool `raspi-config`. Set name on machine, connect to your favorite WiFi and so on.
+
+```
+sudo raspi-config
+```
+
+## Secure your Zero
 
 Don't forget to set a secure password for the `pi` user.
 
-**Congrats!**
+```
+sudo passwd pi
+```
+
+## Congrats!
 
 [Raspberian]: https://www.raspberrypi.org/downloads/raspbian/
 [Etcher]: https://etcher.io/
