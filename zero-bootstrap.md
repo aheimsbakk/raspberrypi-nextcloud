@@ -9,7 +9,6 @@
 
         ```
         vi config.txt
-
         ```
 
         ```
@@ -43,6 +42,8 @@
     ```
     ssh -l pi 10.42.0.XXX
     ```
+
+**Congrats!**
 
 [Raspberian]: https://www.raspberrypi.org/downloads/raspbian/
 [Etcher]: https://etcher.io/
