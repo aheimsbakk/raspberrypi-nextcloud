@@ -15,7 +15,7 @@
         dtoverlay=dwc2
         ```
 
-    - Ensure that modules is loaded during boot.
+    - Ensure that modules are loaded during boot.
 
         ```
         vi cmdline.txt
@@ -42,6 +42,20 @@
     ```
     ssh -l pi 10.42.0.XXX
     ```
+
+- Enable SSH permanently.
+
+    ```
+    sudo systemctl enable ssh
+    ```
+
+- Configure the rest.
+
+    ```
+    sudo raspi-config
+    ```
+
+Don't forget to set a secure password for the `pi` user.
 
 **Congrats!**
 
