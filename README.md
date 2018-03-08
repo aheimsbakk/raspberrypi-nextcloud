@@ -8,6 +8,6 @@ My notes while working with RaspberryPI.
 
 ## PI Zero
 
-* [Bootstrap PI Zero](zero-bootstrap.md)
+* [Bootstrap PI Zero](zero-bootstrap.md), headless setup
 
 * Configuring [DHCP on OTG interface](zero-dhcp.md)
