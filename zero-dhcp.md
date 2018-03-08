@@ -7,7 +7,7 @@ With this configuration all traffic will be routed to the Zero.
 Not useful now, but maybe later.
 
 
-## 1. Set static IP on USB interface 
+## Set static IP on USB interface 
 
 ```
 sudo vi /etc/network/interfaces.d/usb0
@@ -31,7 +31,7 @@ options g_ether host_addr=26:34:d5:8e:55:5a
 ```
 
 
-## 2. Configure DNSMasq
+## Configure DNSMasq
 
 ```
 sudo vi /etc/dnsmasq.d/usb0.config
