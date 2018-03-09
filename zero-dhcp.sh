@@ -53,6 +53,7 @@ sudo sysctl --system
 # Enable IPv4 firewall
 sudo iptables -P INPUT ACCEPT
 sudo iptables -F INPUT
+sudo iptables -F FORWARD
 sudo iptables -F INPUT -t nat
 sudo iptables -A POSTROUTING -t nat -o wlan0 -j MASQUERADE
 sudo iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
@@ -65,6 +66,7 @@ sudo iptables -A FORWARD -i wlan0 -o wlan0 -j REJECT
 # Enable IPv6 firewall
 sudo ip6tables -P INPUT ACCEPT
 sudo ip6tables -F INPUT
+sudo ip6tables -F FORWARD
 sudo ipt6ables -F INPUT -t nat
 sudo ip6tables -A POSTROUTING -t nat -o wlan0 -j MASQUERADE
 sudo ip6tables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
