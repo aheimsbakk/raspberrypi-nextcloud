@@ -67,7 +67,7 @@ sudo iptables -A FORWARD -i wlan0 -o wlan0 -j REJECT
 sudo ip6tables -P INPUT ACCEPT
 sudo ip6tables -F INPUT
 sudo ip6tables -F FORWARD
-sudo ipt6ables -F INPUT -t nat
+sudo ip6tables -F INPUT -t nat
 sudo ip6tables -A POSTROUTING -t nat -o wlan0 -j MASQUERADE
 sudo ip6tables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 sudo ip6tables -A INPUT ! -i wlan0 -m state --state NEW  -j ACCEPT
