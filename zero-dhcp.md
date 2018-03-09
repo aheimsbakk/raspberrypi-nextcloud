@@ -9,11 +9,11 @@ Not useful now, but maybe later.
 
 ## Set static IP on USB interface 
 
-```
+```bash
 sudo vi /etc/network/interfaces.d/usb0
 ```
 
-```
+```interfaces
 auto usb0
 iface usb0 inet static
     address 172.31.7.1
@@ -22,22 +22,22 @@ iface usb0 inet static
 
 ### Set static MAC address
 
-```
+```bash
 sudo vi /etc/modprobe.d/g_ether.config
 ```
 
-```
+```modprobe
 options g_ether host_addr=26:34:d5:8e:55:5a
 ```
 
 
 ## Configure DNSMasq
 
-```
+```bash
 sudo vi /etc/dnsmasq.d/usb0.config
 ```
 
-```
+```dnsmasq
 domain=bob.org
 dhcp-range=172.31.7.100,172.31.7.200,255.255.255.0,1h
 interface=usb0
@@ -51,7 +51,7 @@ dhcp-option=vendor:MSFT,2,1i
 
 ### Start DNSMasq at boot
 
-```
+```bash
 sudo systemctl enable dnsmasq
 ```
 
