@@ -43,7 +43,7 @@ dhcp-range=172.31.7.100,172.31.7.200,255.255.255.0,1h
 interface=usb0
 dhcp-host=26:34:d5:8e:55:5a,172.31.7.1
 
-# Forward all traffic to PI Zero
+# Force default route to PI Zero
 dhcp-option=121,0.0.0.0/0,172.31.7.1
 dhcp-option=249,0.0.0.0/0,172.31.7.1
 dhcp-option=vendor:MSFT,2,1i
