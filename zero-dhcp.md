@@ -71,7 +71,8 @@ sudo sysctl --system
 sudo iptables -A POSTROUTING -t nat -o wlan0 -j MASQUERADE
 sudo iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 sudo iptables -A INPUT ! -i wlan0 -m state --state NEW  -j ACCEPT
-sudo iptables -A INPUT -p tcp -m tcp --dport 22 -m limit --limit 6/min -j ACCEPT
+sudo iptables -A INPUT -p tcp -m tcp --dport 22 -m limit --limit 3/min -j ACCEPT
+sudo iptables -A INPUT -d 224.0.0.251/32 -p udp -m udp --dport 5353 -j ACCEPT
 sudo iptables -P INPUT DROP
 sudo iptables -A FORWARD -i wlan0 -o wlan0 -j REJECT
 
@@ -79,7 +80,8 @@ sudo iptables -A FORWARD -i wlan0 -o wlan0 -j REJECT
 sudo ip6tables -A POSTROUTING -t nat -o wlan0 -j MASQUERADE
 sudo ip6tables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 sudo ip6tables -A INPUT ! -i wlan0 -m state --state NEW  -j ACCEPT
-sudo ip6tables -A INPUT -p tcp -m tcp --dport 22 -m limit --limit 6/min -j ACCEPT
+sudo ip6tables -A INPUT -p tcp -m tcp --dport 22 -m limit --limit 3/min -j ACCEPT
+sudo ip6tables -A INPUT -d ff02::fb/128 -p udp -m udp --dport 5353 -j ACCEPT
 sudo ip6tables -P INPUT DROP
 sudo ip6tables -A FORWARD -i wlan0 -o wlan0 -j REJECT
 
