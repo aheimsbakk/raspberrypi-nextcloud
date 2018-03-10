@@ -4,16 +4,31 @@
 ## This will configure the Raspberry Zero to give your PC an automatic IP. 
 ## It will also set the PCs default gateway to the Zeros IP.
 ##
-## With this configuration all traffic will be routed to the Zero. 
+## With this configuration all IPv4 traffic will be routed to the Zero. 
+##
+## IPv6 configuration is only for my own learning.
 ##
 
 # Set static IP on USB interface 
 
-cat <<EOF | sudo tee /etc/network/interfaces.d/usb0
-auto usb0
-iface usb0 inet static
-    address 172.31.7.1
-    netmask 255.255.255.0
+cat <<EOF | sudo tee /etc/dhcpcd.conf
+hostname
+clientid
+persistent
+
+option rapid_commit
+option domain_name_servers, domain_name, domain_search, host_name
+option classless_static_routes
+option ntp_servers
+option interface_mtu
+
+require dhcp_server_identifier
+
+slaac private
+
+interface usb0
+static ip_address=172.31.7.1/28
+static ip6_address=fdac::1/64
 EOF
 
 # Set static MAC address on usb0, PI side only
@@ -25,16 +40,19 @@ EOF
 # Configure DNSMasq
 
 cat <<EOF | sudo tee /etc/dnsmasq.d/usb0.conf
-domain=bob.org
-dhcp-range=172.31.7.100,172.31.7.200,255.255.255.0,1h
 interface=usb0
-dhcp-host=26:34:d5:8e:55:5a,172.31.7.1
+dhcp-authoritative
+enable-ra
+dhcp-range=172.31.7.2, 172.31.7.14,255.255.255.240, 10m
+dhcp-range=fdac::2, fdac::14, 64, 10m
+dhcp-option=option:router, 172.31.7.1
 
 # Force default route to PI Zero
 # Higher order than routes than 0.0.0.0/0
-dhcp-option=121,0.0.0.0/1,172.31.7.1,128.0.0.0/1,172.31.7.1
-dhcp-option=249,0.0.0.0/1,172.31.7.1,128.0.0.0/1,172.31.7.1
-dhcp-option=vendor:MSFT,2,1i
+dhcp-option=121,0.0.0.0/1, 172.31.7.1, 128.0.0.0/1, 172.31.7.1
+dhcp-option=249,0.0.0.0/1, 172.31.7.1, 128.0.0.0/1, 172.31.7.1
+dhcp-option=vendor:MSFT, 2, 1i
+dhcp-option=option6:dns-server,[::]
 EOF
 
 # Start DNSMasq at boot
@@ -70,6 +88,10 @@ sudo ip6tables -F FORWARD
 sudo ip6tables -F INPUT -t nat
 sudo ip6tables -A POSTROUTING -t nat -o wlan0 -j MASQUERADE
 sudo ip6tables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo ip6tables -A INPUT -p icmpv6 --icmpv6-type router-advertisement -j ACCEPT
+sudo ip6tables -A INPUT -p icmpv6 --icmpv6-type neighbor-solicitation -j ACCEPT
+sudo ip6tables -A INPUT -p icmpv6 --icmpv6-type neighbor-advertisement -j ACCEPT
+sudo ip6tables -A INPUT -p icmpv6 --icmpv6-type redirect -j ACCEPT
 sudo ip6tables -A INPUT ! -i wlan0 -m state --state NEW  -j ACCEPT
 sudo ip6tables -A INPUT -d ff02::fb/128 -p udp -m udp --dport 5353 -j ACCEPT
 sudo ip6tables -A INPUT -p tcp -m tcp --dport 22 -m limit --limit 3/min -j ACCEPT
