@@ -52,7 +52,7 @@ dhcp-option=option:router, 172.31.7.1
 dhcp-option=121,0.0.0.0/1, 172.31.7.1, 128.0.0.0/1, 172.31.7.1
 dhcp-option=249,0.0.0.0/1, 172.31.7.1, 128.0.0.0/1, 172.31.7.1
 dhcp-option=vendor:MSFT, 2, 1i
-dhcp-option=dns-server, 172.31.7.1
+dhcp-option=option:dns-server, 172.31.7.1
 dhcp-option=option6:dns-server, [::]
 EOF
 
