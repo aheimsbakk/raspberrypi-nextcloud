@@ -9,27 +9,11 @@ down a short recipe to remember how to do it.
 
 - Mount the microSD card, and go to the `/boot` partition.
 
-    - Add device tree overlay dwc2 driver to enable OTG host/gadget flipping on the OTG port.
+    - Add device tree overlay dwc2 driver to enable OTG host/gadget flipping on the OTG port. And ensure that modules, including OTG network driver, are loaded during boot. Last but not least. Enable SSH on first boot.
 
         ```
-        vi config.txt
-        ```
-
-        ```
-        dtoverlay=dwc2
-        ```
-
-    - Ensure that modules, including OTG network driver, are loaded during boot.
-
-        ```
-        vi cmdline.txt
-        ```
-
-        Add `modules-load=dwc2,g_ether` after `rootwait`.
-        
-    - Enable SSH during first boot.
-
-        ```
+        grep -q ^dtoverlay config.txt || sed -i '$ a\dtoverlay=dwc2' config.txt
+        sed -i -E '/rootwait [^m]/ s/(rootwait)/\1 modules-load=dwc2,g_ether/' cmdline.txt
         touch ssh
         ```
 
