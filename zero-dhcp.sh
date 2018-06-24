@@ -11,6 +11,10 @@
 
 # Set static IP on USB interface 
 
+sudo apt-get update
+sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install iptables-persistent dhcpcd dnsmasq
+sudo apt-get purge -y isc-dhcp-common isc-dhcp-client
+
 cat <<EOF | sudo tee /etc/dhcpcd.conf
 hostname
 clientid
@@ -63,7 +67,7 @@ sudo systemctl enable dnsmasq
 # Forward IP traffic
 cat <<EOF | sudo tee /etc/sysctl.d/50-forward.conf
 net.ipv4.ip_forward = 1
-net.ipv6.ip_forward = 1
+net.ipv6.conf.all.forwarding = 1
 EOF
 
 # Reload changes
@@ -100,6 +104,10 @@ sudo ip6tables -P INPUT DROP
 sudo ip6tables -A FORWARD -i wlan0 -o wlan0 -j REJECT
 
 # Save current netfilter rules, and reload on boot
-sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install iptables-persistent
 sudo netfilter-persistent save
 
+# Ensure you enabled SSH permanently
+sudo systemctl enable ssh
+
+# Set the obvious name for the device
+echo zero | sudo tee /etc/hostname
