@@ -12,7 +12,7 @@
 # Set static IP on USB interface 
 
 sudo apt-get update
-sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install iptables-persistent dnsmasq
+sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install iptables-persistent dhcpcd dnsmasq
 sudo apt-get purge -y isc-dhcp-common isc-dhcp-client
 
 cat <<EOF | sudo tee /etc/dhcpcd.conf

@@ -60,16 +60,17 @@ On your Linux machine, use `nm-connection-editor` and share your Internet throug
 
 ### Via serial
 
-- On Debian, add the current user to the `dialout` group to get access to the Raspberrys serial device.
+- On Debian, add the current user to the `dialout` group to get access to the Raspberrys serial device. Using `newgrp` to set the new group as default group, hack for activating without logging out and in again.
 
     ```
     sudo groupadd -g dialout aheimsbakk
+    newgrp dialout
     ```
 
 - Connect to the Raspberry PI.
 
     ```
-    sudo screen /dev/ttyACM0 115200
+    screen /dev/ttyACM0 115200
     ```
 
 ## Finish up configuration
